@@ -52,6 +52,10 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
+  if (request.url === '/classes/messages') {
+    response.end('You are in the chat');
+  }
+
   response.end("Hello, World!");
 };
 
@@ -71,3 +75,4 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+module.exports.requestHandler = requestHandler;
