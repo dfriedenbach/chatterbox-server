@@ -1,11 +1,11 @@
 var data = {
     results: [
-      {"createdAt":"2015-07-20T23:45:18.703Z","objectId":"0VEEVx1P3Q","roomname":"secret","text":"Another ANOTHE another message  .","updatedAt":"2015-07-20T23:45:18.703Z","username":"Wut"},
-      {"createdAt":"2015-07-20T23:44:58.411Z","objectId":"njxIH5Uabc","roomname":"lobby","text":"wohooo","updatedAt":"2015-07-20T23:44:58.411Z","username":"test"},
-      {"createdAt":"2015-07-20T23:42:19.319Z","objectId":"DVyVtGQyx6","roomname":"lobby","text":"kdkdkdkd","updatedAt":"2015-07-20T23:42:19.319Z","username":"tester"},
-      {"createdAt":"2015-07-20T23:41:07.917Z","objectId":"HuKK3zlgpi","roomname":"lobby","text":"gdsafg","updatedAt":"2015-07-20T23:41:07.917Z","username":"tester"},
-      {"createdAt":"2015-07-20T23:36:55.005Z","objectId":"aROvGJpFnL","roomname":"lobby","text":"hi","updatedAt":"2015-07-20T23:36:55.005Z","username":"ggg"},
-      {"createdAt":"2015-07-20T23:34:46.591Z","objectId":"SOg2Q5Pggj","roomname":"lobby","text":"IS ANYBODY STILL ON HERE","updatedAt":"2015-07-20T23:34:46.591Z","username":"Rick%20Morty"}
+      // {"createdAt":"2015-07-20T23:45:18.703Z","objectId":"0VEEVx1P3Q","roomname":"secret","text":"Another ANOTHE another message  .","updatedAt":"2015-07-20T23:45:18.703Z","username":"Wut"},
+      // {"createdAt":"2015-07-20T23:44:58.411Z","objectId":"njxIH5Uabc","roomname":"lobby","text":"wohooo","updatedAt":"2015-07-20T23:44:58.411Z","username":"test"},
+      // {"createdAt":"2015-07-20T23:42:19.319Z","objectId":"DVyVtGQyx6","roomname":"lobby","text":"kdkdkdkd","updatedAt":"2015-07-20T23:42:19.319Z","username":"tester"},
+      // {"createdAt":"2015-07-20T23:41:07.917Z","objectId":"HuKK3zlgpi","roomname":"lobby","text":"gdsafg","updatedAt":"2015-07-20T23:41:07.917Z","username":"tester"},
+      // {"createdAt":"2015-07-20T23:36:55.005Z","objectId":"aROvGJpFnL","roomname":"lobby","text":"hi","updatedAt":"2015-07-20T23:36:55.005Z","username":"ggg"},
+      // {"createdAt":"2015-07-20T23:34:46.591Z","objectId":"SOg2Q5Pggj","roomname":"lobby","text":"IS ANYBODY STILL ON HERE","updatedAt":"2015-07-20T23:34:46.591Z","username":"Rick%20Morty"}
     ] // implement max 100 messasges
   };
 
@@ -24,29 +24,31 @@ var generateRandomId = function () {
 var requestHandler = function(request, response) {
   var statusCode = 200;
   var headers = defaultCorsHeaders;
-  console.log(data.results.length);
   console.log("Serving request type " + request.method + " for url " + request.url);
 
   headers['Content-Type'] = "application/json";
-  response.writeHead(statusCode, headers);
+  //response.writeHead(statusCode, headers);
 
-  if (request.url.slice(0, 17) === '/classes/messages') {
-    if (request.method === 'POST') { // add message to results
-      var body = "";
+  if (request.url.slice(0, 9) === '/classes/') {
+    if (request.method === 'POST') {
+      response.writeHead(201, headers);
       request.on('data', function (message) {
         var message = JSON.parse(message);
         message.createdAt = new Date().toISOString();
         message.objectId = generateRandomId();
         data.results.push(message);
+        response.end(JSON.stringify(message));
       });
-      response.end('{"status":200}');
-    } else if (request.method === 'GET') { // send data
+    } else if (request.method === 'GET') { 
+      response.writeHead(200, headers);
       response.end(JSON.stringify(data), 'utf8', function () { console.log('Messages Sent'); });
     } else {
-      response.end('Hello Werld');
+      response.writeHead(405, headers);
+      response.end('{"status":405}');
     }
   } else {
-    response.end('Hello Werld');
+    response.writeHead(404, headers);
+    response.end('{"status":404}');
   }
 };
 
