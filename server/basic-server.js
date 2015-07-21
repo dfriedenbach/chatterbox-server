@@ -3,6 +3,7 @@ var http = require("http");
 var handleRequest = require("./request-handler.js").requestHandler;
 
 
+
 // Every server needs to listen on a port with a unique number. The
 // standard port for HTTP servers is port 80, but that port is
 // normally already claimed by another server and/or not accessible
@@ -24,6 +25,7 @@ var ip = "127.0.0.1";
 //
 // After creating the server, we will tell it to listen on the given port and IP. */
 var server = http.createServer(handleRequest);
+
 // var server = http.createServer(function (req, res) {
 //   res.write('derp');
 //   // http.get('localhost:3000/lol', function (res) {
